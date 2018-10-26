@@ -9,7 +9,7 @@ var cli = require('minimist')(process.argv.slice(2))
 var config = require('./jira-config.json')
 
 if (!(config.host && config.user && config.token)) {
-  console.log(chalk.red('Please configure jira in jira-config.json'))
+  console.log(chalk.red('Please configure jira in jira-config.json with host, user and token'))
   process.exit()
 }
 
