@@ -5,7 +5,7 @@ const moment = require('moment')
 var JiraClient = require('jira-connector')
 const git = require('simple-git/promise')()
 const { exec } = require('child_process')
-const interactive = require('./interactive')
+const interactive = require('./src/interactive')
 var cli = require('minimist')(process.argv.slice(2))
 var config = require('./jira-config.json')
 
