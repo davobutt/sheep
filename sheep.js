@@ -11,8 +11,6 @@ var config = require('./jira-config.json')
 
 let jira
 
-
-
 const handleCommandResponse = (error, result) => {
   if (error) {
     let message = JSON.stringify(error, null, 2)
@@ -120,9 +118,7 @@ const main = async () => {
     console.log('\t\t-t <hours>')
     console.log('\t\t-o <days ago>')
     console.log('\t\te.g ' + chalk.grey('sheep log -i WEB-9999 -t 1.5 -o 5'))
-
   }
-
 }
 
 main()

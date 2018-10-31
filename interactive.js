@@ -1,6 +1,6 @@
 const prompt = require('prompt')
 const fs = require('fs')
-var path = require('path');
+var path = require('path')
 var appDir = path.dirname(require.main.filename)
 
 const interactive = module.exports = {}
@@ -36,6 +36,5 @@ interactive.getJiraConfig = (host, user, token) => {
       fs.writeFileSync(appDir + '/jira-config.json', JSON.stringify(result, null, 2))
       return resolve(result)
     })
-
   })
 }
