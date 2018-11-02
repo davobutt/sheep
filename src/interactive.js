@@ -8,7 +8,7 @@ const interactive = module.exports = {}
 const jiraConfigSchema = {
   properties: {
     host: {
-      description: 'Host (yourcompany.atlassian.net)',
+      description: 'Host',
       required: true
     },
     user: {

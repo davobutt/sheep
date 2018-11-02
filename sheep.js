@@ -9,6 +9,8 @@ const interactive = require('./src/interactive')
 var cli = require('minimist')(process.argv.slice(2))
 var config = require('./jira-config.json')
 
+const worklog = require('./src/worklog')
+
 let jira
 
 const handleCommandResponse = (error, result) => {
@@ -34,8 +36,8 @@ const logTime = (issueKey, hours, offset = 0) => {
   jira.issue.addWorkLog(options, handleCommandResponse)
 }
 
-const printIssue = (issue) => {
-  console.log(chalk.blue(`🐑  ${chalk.green(issue.key)} ${chalk.yellow(issue.fields.summary)}`))
+const printIssue = (issues) => {
+  issues.forEach(i => console.log(chalk.blue(`🐑  ${chalk.green(i.key)} ${chalk.yellow(i.fields.summary)}`)))
 }
 
 const getIssueFromGitBranch = async () => {
@@ -51,16 +53,10 @@ const browseIssue = (issueKey) => {
   exec(`open https://${config.host}/browse/${issueKey}`)
 }
 
-const getIssue = (issueKey, successHandler) => {
-  jira.issue.getIssue({
-    issueKey: issueKey
-  }, (error, issue) => {
-    if (error) {
-      handleCommandResponse(error)
-    } else {
-      successHandler(issue)
-    }
-  })
+const getIssues = (issues, successHandler) => {
+  Promise.all(issues.map(i => jira.issue.getIssue({issueKey: i})))
+    .then(results => successHandler(results))
+    .catch(error => handleCommandResponse(error))
 }
 
 const main = async () => {
@@ -82,43 +78,52 @@ const main = async () => {
     }
   })
 
-  const issueKey = cli.i || await getIssueFromGitBranch()
+  if (cli._.length === 0 || cli._.includes('help')) {
+    showHelp()
+    process.exit()
+  }
+
+  const firstIssue = Array.isArray(cli.i) ? cli.i[0] : cli.i
+  const issueKey = firstIssue || await getIssueFromGitBranch()
+
+  if (!issueKey) {
+    console.log(chalk.yellow('Jira ticket could not be determined'))
+    process.exit()
+  }
+
+  const issueParamAsArray = cli.i ? [].concat(cli.i) : [issueKey]
 
   if (cli._.includes('browse')) {
-    if (issueKey) {
-      browseIssue(issueKey)
-    } else {
-      console.log(chalk.yellow('Jira ticket could not be determined'))
-    }
+    browseIssue(issueKey)
   }
 
   if (cli._.includes('log')) {
-    if (issueKey && cli.t) {
+    if (cli.t) {
       logTime(issueKey, cli.t, cli.d)
     }
   }
 
-  if (cli._.includes('view')) {
-    if (issueKey) {
-      getIssue(issueKey, printIssue)
-    } else {
-      console.log(chalk.yellow('Jira ticket could not be determined'))
-    }
+  if (cli._.includes('showtime')) {
+    getIssues(issueParamAsArray, worklog.showWorkLog(config.user))
   }
 
-  if (cli._.length === 0) {
-    console.log(chalk.blue('🐑  Sheep jira & git tools'))
-    console.log(chalk.green('sheep view|browse|log [-i <issue key>] [options]\n'))
-    console.log('gets jira issue from current branch or')
-    console.log('-i <issue key>')
-    console.log()
-    console.log('view\t view the issue summary')
-    console.log('browse\t open the issues web page')
-    console.log('log\t log time against issue for today')
-    console.log('\t\t-t <hours>')
-    console.log('\t\t-o <days ago>')
-    console.log('\t\te.g ' + chalk.grey('sheep log -i WEB-9999 -t 1.5 -o 5'))
+  if (cli._.includes('view')) {
+    getIssues(issueParamAsArray, printIssue)
   }
 }
 
 main()
+
+function showHelp () {
+  console.log(chalk.blue('🐑  Sheep jira & git tools'))
+  console.log(chalk.green('sheep view|browse|log [-i <issue key>] [options]\n'))
+  console.log('gets jira issue from current branch or')
+  console.log('-i <issue key>')
+  console.log()
+  console.log('view\t view the issue summary')
+  console.log('browse\t open the issues web page')
+  console.log('log\t log time against issue for today')
+  console.log('\t\t-t <hours>')
+  console.log('\t\t-o <days ago>')
+  console.log('\t\te.g ' + chalk.grey('sheep log -i WEB-9999 -t 1.5 -o 5'))
+}
