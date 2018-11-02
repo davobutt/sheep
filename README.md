@@ -1,14 +1,20 @@
 # 🐑 sheep [![Build Status](https://travis-ci.org/davobutt/sheep.svg?branch=master)](https://travis-ci.org/davobutt/sheep)
 
-Command line jira and git utility.
+Command line jira and git utility written for NodeJS.
 
 Simple view and time logging functions for jira. Sheep uses the current branch as the jira key if one is not supplied. 
 
 ## Install ##
 
-Clone it, make sheep.js executable and then create a link in your path like
+Clone it, install dependencies, make sheep.js executable and then create a link in your path like
 
-`ln -s /place/sheep/lives/sheep.js /place/on/path/sheep`
+```
+git clone https://github.com/davobutt/sheep.git
+cd sheep
+npm i
+chmod +x /place/sheep/lives/sheep.js
+ln -s /place/sheep/lives/sheep.js /place/on/path/sheep
+```
 
 ## Usage ##
 
