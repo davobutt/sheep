@@ -11,7 +11,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "jira-connector": "^2.9.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "moment": "^2.22.2",
     "prompt": "^1.0.0",
     "simple-git": "^1.105.0",
