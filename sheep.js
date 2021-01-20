@@ -7,7 +7,10 @@ const git = require('simple-git/promise')()
 const { exec } = require('child_process')
 const interactive = require('./src/interactive')
 var cli = require('minimist')(process.argv.slice(2))
-var config = require('./jira-config.json')
+let config = {}
+try {
+  config = require('./jira-config.json')
+} catch (e) {}
 
 const worklog = require('./src/worklog')
 
@@ -46,7 +49,8 @@ const getIssueFromGitBranch = async () => {
     branchName = (await git.silent(true).revparse(['--abbrev-ref', 'HEAD'])).trim()
   } catch (e) {
   }
-  return /[A-Z]{2,}-\d*/gm.test(branchName) ? branchName : null
+  const match = /[A-Z]{2,}-\d*/gm.exec(branchName)
+  return match.length > 0 && match[0] || null
 }
 
 const browseIssue = (issueKey) => {
