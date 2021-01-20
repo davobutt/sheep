@@ -30,8 +30,8 @@ You need a `jira-config.json` that looks like
 *[experimental]* You can generate this interactively by just running sheep without this.
 You can find your jira access token at https://id.atlassian.com/manage
 
-It's common practice to do work on a branch with the same name as your jira issue key (e.g DEV-1234)
-**sheep** will find a jira issue key from your current branch or accept the issue or issues as command line params.
+It's common practice to do work on a branch with the same name as your jira issue key e.g **DEV-1234**
+**sheep** will find a jira issue key from your current branch or accept the issue or issues as command line params. **Sheep** also works if you have something after the numbers of the ticket e.g. **DEV-1008-Fix-all-the-things**
 
 ### view ###
 
