@@ -9,13 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^2.4.1",
-    "jira-connector": "^2.9.0",
-    "minimist": "^1.2.0",
-    "moment": "^2.22.2",
-    "prompt": "^1.0.0",
-    "simple-git": "^1.105.0",
-    "tty-table": "^2.6.9"
+    "chalk": "^2.4.2",
+    "jira-connector": "^2.16.1",
+    "minimist": "^1.2.5",
+    "moment": "^2.29.1",
+    "prompt": "^1.1.0",
+    "simple-git": "^1.132.0",
+    "tty-table": "^2.8.13"
   },
   "devDependencies": {
     "jest": "^23.6.0"
