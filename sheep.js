@@ -27,12 +27,13 @@ const handleCommandResponse = (error, result) => {
 }
 
 const logTime = (issueKey, hours, offset = 0) => {
-  console.log(chalk.blue(`🐑  Log Time ${chalk.green(issueKey)} ${hours}h ${offset ? `${offset} days ago` : ''}`))
+  const dateToLog = moment().subtract(offset, 'd')
+  console.log(chalk.blue(`🐑  Log Time ${chalk.green(issueKey)} ${hours}h ${offset ? `${offset} days ago (${chalk.yellow(dateToLog.format('ddd Do'))})` : ''}`))
   const seconds = parseFloat(hours) * 60 * 60
   const options = {
     issueKey,
     worklog: {
-      started: moment().subtract(offset, 'd').format('YYYY-MM-DDThh:mm:ss.SSSZZ'),
+      started: dateToLog.format('YYYY-MM-DDThh:mm:ss.SSSZZ'),
       timeSpentSeconds: seconds
     }
   }
@@ -103,7 +104,7 @@ const main = async () => {
 
   if (cli._.includes('log')) {
     if (cli.t) {
-      logTime(issueKey, cli.t, cli.d)
+      logTime(issueKey, cli.t, cli.o)
     }
   }
 
